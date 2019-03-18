@@ -1,0 +1,6 @@
+<launch>
+	<node pkg="turtlesim" name="sim" type="turtlesim_node"/>
+	<node pkg="zad1" name="turtle_changed_keys" type="turtle_changed_keys.py">
+		<rosparam command="load" file="$(find zad1)/params.yaml"/>
+	</node>
+</launch>
