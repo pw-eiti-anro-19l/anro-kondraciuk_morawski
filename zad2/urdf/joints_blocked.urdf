@@ -3,21 +3,25 @@
     <xacro:property name="props" value="${load_yaml('../urdf.yaml')}"/>
     <xacro:property name="l_width" value="0.02"/>
  
+    <material name="red">
+        <color rgba="0.80392157 0 0 1"/>
+    </material>
+
     <material name="blue">
         <color rgba="0 0 0.8 1"/>
     </material>
 
-    <material name="white"> 
-        <color rgba="1 1 1 1"/>
+    <material name="black"> 
+        <color rgba="0.05 0.05 0.05 1"/>
     </material>
 
     <link name="base_link">
         <visual>
             <geometry>
-                <cylinder length="0.1" radius="0.5"/>
+                <cylinder length="0.1" radius="0.3"/>
             </geometry>
             <origin xyz="0 0 -0.05"/>
-            <material name="white"/>
+            <material name="black"/>
         </visual>
     </link>
 
@@ -51,6 +55,16 @@
         </visual>
     </link>
 
+    <link name="hand">
+        <visual>
+            <geometry>
+                <cylinder length="0.05" radius="0.02"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="red"/>
+        </visual>
+    </link>       
+
     <joint name="base_to_link1" type="fixed">
         <parent link="base_link"/>
         <child link="link_1"/>
@@ -73,6 +87,12 @@
         <origin xyz="${props['i3']['j_xyz']}" rpy="${props['i3']['j_rpy']}"/>
         <limit effort="1000.0" lower="-1" upper="0" velocity="1"/>
         <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="link3_to_hand" type="fixed">
+        <parent link="link_3"/>
+        <child link="hand"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
     </joint>
 
 </robot>

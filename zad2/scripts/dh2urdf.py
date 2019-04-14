@@ -1,34 +1,32 @@
-#! /usr/bin/python
-
 import json
+
 from tf.transformations import *
 
+with open('../dh_data.json', 'r') as file:
+        dhJson= json.loads(file.read())
+
 xaxis, yaxis, zaxis = (1, 0, 0), (0, 1, 0), (0, 0, 1)
+with open('../urdf.yaml', 'w') as file:
+        for instance in dhJson:
+                oneInstance= json.loads(json.dumps(instance))
+                a = oneInstance["a"]
+                d = oneInstance["d"]
+                alpha=oneInstance["alpha"]
+                theta = oneInstance["theta"]
 
-if __name__ == '__main__':
-    params = {}
-    results = ''
-    with open('../dh_data.json', 'r') as file:
-        params = json.loads(file.read())
+                matrixD= translation_matrix((0, 0, d))
+                matrixTheta = rotation_matrix(theta, zaxis)
+                matrixA = translation_matrix((a, 0, 0))
+                matrixAlpha = rotation_matrix(alpha, xaxis)
 
-    with open('../urdf.yaml', 'w') as file:
-        for key in params.keys():
-            a, d, alpha, theta = params[key]
-            a, d, alpha, theta = float(a), float(d), float(alpha), float(theta)
+                TransMatrix = concatenate_matrices(matrixA,matrixAlpha,matrixTheta, matrixD)
+                rpy = euler_from_matrix(TransMatrix)
+                xyz = translation_from_matrix(TransMatrix)
 
-            tz = translation_matrix((0, 0, d))
-            rz = rotation_matrix(theta, zaxis)
-            tx = translation_matrix((a, 0, 0))
-            rx = rotation_matrix(alpha, xaxis)
-
-            matrix = concatenate_matrices(tx, rx, tz, rz)
-
-            rpy = euler_from_matrix(matrix)
-            xyz = translation_from_matrix(matrix)
-
-            file.write(key + ":\n")
-            file.write("  j_xyz: {} {} {}\n".format(*xyz))
-            file.write("  j_rpy: {} {} {}\n".format(*rpy))
-            file.write("  l_xyz: 0 0 {}\n".format(-d/2))
-            file.write("  l_rpy: 0 0 0\n")
-	    file.write("  l_len: {}\n".format(d))
+                
+                file.write(oneInstance["name"] + ":\n")
+                file.write("  j_xyz: "+str(xyz[0])+" "+str(xyz[1])+" "+str(xyz[2])+"\n")
+                file.write("  j_rpy: "+str(rpy[0])+' '+str(rpy[1])+' '+str(rpy[2])+'\n')
+                file.write("  l_xyz: "+str(0)+' '+str(0)+' '+str(float(d)*(-0.5))+'\n')
+                file.write("  l_rpy: "+str(0)+' '+str(0)+' '+str(0)+'\n')
+	        file.write("  l_len: "+str(d)+'\n')
