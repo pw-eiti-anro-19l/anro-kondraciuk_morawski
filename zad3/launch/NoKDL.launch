@@ -1,0 +1,5 @@
+<launch>
+    <param name="robot_description" command="xacro --inorder '$(find zad3)/urdf/joints_blocked.urdf'"/>
+    <param name="use_gui" value="true"/>
+    <node name="NON_KDL" pkg="zad3" type="noKDL.py" />
+</launch>
