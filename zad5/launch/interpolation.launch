@@ -1,0 +1,8 @@
+<launch>
+    <param name="robot_description" command="xacro --inorder '$(find zad5)/urdf/joints_movable.urdf'"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-f base_link" required="true"/>
+    <node name="clearServer" pkg="zad5" type="interpolate_one_dim.py" />
+    <node name="InterServer" pkg="zad5" type="interpolate_clear.py" />
+    <node name="jint" pkg="zad5" type="jint.py" />
+</launch>
