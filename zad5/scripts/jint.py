@@ -30,8 +30,11 @@ y2=0
 z2=0
 time=0
 id=0
+marker_idx = 0
+max_markers = 10
+
 def callback(data):
-    global x1, x2, y1, y2, z1, z2, time, id
+    global x1, x2, y1, y2, z1, z2, time, id, max_markers, marker_idx
 
 
     rate = rospy.Rate(40) # 10hz
@@ -72,7 +75,13 @@ def callback(data):
         marker.pose.position.y = -x
         marker.pose.position.z = y
         marker.id = id
-        markerArray.markers.append(marker)
+        if len(markerArray.markers) < max_markers:
+            markerArray.markers.append(marker)
+            marker_idx = 0
+        else:
+            markerArray.markers[marker_idx] = marker
+            marker_idx = (marker_idx+1)%len(markerArray.markers)
+        print marker_idx
         
         
         id += 1

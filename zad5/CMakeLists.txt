@@ -161,10 +161,27 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+ install(PROGRAMS
+   scripts/interpolate_one_dim.py
+   scripts/jint.py
+   scripts/interpolate_clear.py
+   scripts/IKIN.py
+   scripts/elipse.py
+   scripts/dh2urdf.py
+   scripts/KDL.py
+   scripts/noKDL.py
+   scripts/oint.py
+   scripts/rectangle.py
+   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+ )
+
+install(DIRECTORY launch/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+  )
+
+install(DIRECTORY urdf/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/urdf
+  )
 
 ## Mark executables and/or libraries for installation
 # install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node

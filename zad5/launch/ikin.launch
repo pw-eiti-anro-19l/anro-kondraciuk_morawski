@@ -5,6 +5,6 @@
     <node name="rviz" pkg="rviz" type="rviz" args="-f base_link" required="true"/>
     <node name="clearServer" pkg="zad5" type="interpolate_one_dim.py" />
     <node name="InterServer" pkg="zad5" type="interpolate_clear.py" />
-    <node name="oint" pkg="zad5" type="oint.py" />
+    <node name="oint" pkg="zad5" type="oint.py" output="screen" />
     <node name="ikin" pkg="zad5" type="IKIN.py" />
 </launch>

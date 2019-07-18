@@ -4,6 +4,7 @@ import json
 import rospy
 import PyKDL
 import os
+import copy
 from sensor_msgs.msg import JointState
 from sensor_msgs.msg import *
 from tf.transformations import *
@@ -29,8 +30,10 @@ z2=0
 time=0
 id=0
 markerArray=MarkerArray()
+marker_idx = 0
+max_markers = 200
 def callback(data):
-    global x1, x2, y1, y2, z1, z2, time, id, markerArray
+    global x1, x2, y1, y2, z1, z2, time, id, markerArray, max_markers, marker_idx
 
     rate = rospy.Rate(40)
     startTime = rospy.get_rostime().secs+0.000000001*rospy.get_rostime().nsecs
@@ -63,9 +66,9 @@ def callback(data):
         marker.header.frame_id = "base_link"
         marker.type = marker.SPHERE
         marker.action = marker.ADD
-        marker.scale.x = 0.1
-        marker.scale.y = 0.1
-        marker.scale.z = 0.1
+        marker.scale.x = 0.01
+        marker.scale.y = 0.01
+        marker.scale.z = 0.01
         marker.color.a = 1.0
         marker.color.r = 0.0
         marker.color.g = 1.0
@@ -74,9 +77,15 @@ def callback(data):
         marker.pose.position.x = x 
         marker.pose.position.y = y 
         marker.pose.position.z = z 
-        marker.id = id
-        id+=1
-        markerArray.markers.append(marker)
+        if len(markerArray.markers) <= max_markers:
+            marker.id = len(markerArray.markers)
+            markerArray.markers.append(marker)
+            marker_idx = 0
+        else:
+            marker.id = marker_idx
+            markerArray.markers[marker_idx] = marker
+            marker_idx = (marker_idx+1)%len(markerArray.markers)
+        print marker_idx
         pub2.publish(markerArray)
         rate.sleep()
         pub.publish(pose)

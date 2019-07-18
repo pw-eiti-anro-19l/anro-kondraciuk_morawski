@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot name="manipulator" xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:property name="props" value="${load_yaml('../urdf.yaml')}"/>
+    <xacro:property name="props" value="${load_yaml('urdf.yaml')}"/>
     <xacro:property name="l_width" value="0.1"/>
  
     <material name="red">

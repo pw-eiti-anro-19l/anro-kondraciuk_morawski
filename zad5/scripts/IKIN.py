@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import rospkg
 import json
 import rospy
 import PyKDL
@@ -36,10 +37,12 @@ def callback(data):
 TransMatrix= []
 if __name__ == '__main__':
 
+    rospack = rospkg.RosPack()
+
     rospy.init_node('IKIN', anonymous=False)
     pub=rospy.Publisher("joint_states", JointState , queue_size=10)
     rospy.Subscriber("Axes", PoseStamped , callback)
-    with open(os.path.dirname(os.path.realpath(__file__)) + '/../dh_data.json', 'r') as file:
+    with open(rospack.get_path('zad5') + '/urdf/dh_data.json', 'r') as file:
         dhJson= json.loads(file.read())
     T = translation_matrix((0, 0, 0));
 
